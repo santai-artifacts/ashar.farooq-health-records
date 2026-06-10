@@ -1,1 +1,509 @@
-<h1>This is a manual deploy!!!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Records</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .form-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .records-section {
+            background: transparent;
+        }
+
+        .records-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .records-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .record-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .record-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .record-card.type-checkup {
+            border-left-color: #1976d2;
+        }
+
+        .record-card.type-medication {
+            border-left-color: #7b1fa2;
+        }
+
+        .record-card.type-lab {
+            border-left-color: #388e3c;
+        }
+
+        .record-card.type-vaccination {
+            border-left-color: #f57c00;
+        }
+
+        .record-card.type-other {
+            border-left-color: #999;
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .record-icon-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .record-icon {
+            font-size: 1.8em;
+        }
+
+        .record-type-label {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .type-checkup .record-type-label {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .type-medication .record-type-label {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .type-lab .record-type-label {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .type-vaccination .record-type-label {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .type-other .record-type-label {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .record-date {
+            color: #999;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .record-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+
+        .record-notes {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .record-notes-empty {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .record-vitals {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: #555;
+            margin-bottom: 12px;
+            font-family: monospace;
+            border-left: 3px solid #667eea;
+        }
+
+        .record-vitals-empty {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .record-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .delete-btn {
+            padding: 8px 14px;
+            background: #ff5252;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #ff1744;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #ccc;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #aaa;
+            font-size: 1.05em;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .form-section {
+                height: auto;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .records-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Health Records</h1>
+            <p class="subtitle">Keep track of your medical appointments, medications, lab results, and vaccinations</p>
+        </header>
+
+        <div class="content">
+            <div class="form-section">
+                <h2>Add New Record</h2>
+                <form id="recordForm">
+                    <div class="form-group">
+                        <label for="recordDate">Date</label>
+                        <input type="date" id="recordDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recordType">Type</label>
+                        <select id="recordType" required>
+                            <option value="">Select type...</option>
+                            <option value="checkup">Checkup</option>
+                            <option value="medication">Medication</option>
+                            <option value="lab">Lab Results</option>
+                            <option value="vaccination">Vaccination</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recordTitle">Title</label>
+                        <input type="text" id="recordTitle" placeholder="e.g., Annual Physical, Flu Shot" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recordNotes">Notes</label>
+                        <textarea id="recordNotes" placeholder="Add any additional notes or details..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recordVitals">Vitals (optional)</label>
+                        <input type="text" id="recordVitals" placeholder="e.g., BP: 120/80, HR: 72">
+                    </div>
+
+                    <button type="submit">Add Record</button>
+                </form>
+            </div>
+
+            <div class="records-section">
+                <h2>Your Records</h2>
+                <div id="recordsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const records = [];
+
+        const typeIcons = {
+            checkup: '👨‍⚕️',
+            medication: '💊',
+            lab: '🔬',
+            vaccination: '💉',
+            other: '📋'
+        };
+
+        const form = document.getElementById('recordForm');
+        const recordsList = document.getElementById('recordsList');
+        const recordDateInput = document.getElementById('recordDate');
+
+        // Set today's date as default
+        const today = new Date().toISOString().split('T')[0];
+        recordDateInput.value = today;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const record = {
+                id: Date.now(),
+                date: document.getElementById('recordDate').value,
+                type: document.getElementById('recordType').value,
+                title: document.getElementById('recordTitle').value,
+                notes: document.getElementById('recordNotes').value,
+                vitals: document.getElementById('recordVitals').value,
+            };
+
+            records.unshift(record);
+            renderRecords();
+            form.reset();
+            recordDateInput.value = today;
+        });
+
+        function deleteRecord(id) {
+            const index = records.findIndex(r => r.id === id);
+            if (index > -1) {
+                records.splice(index, 1);
+                renderRecords();
+            }
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                checkup: 'Checkup',
+                medication: 'Medication',
+                lab: 'Lab Results',
+                vaccination: 'Vaccination',
+                other: 'Other'
+            };
+            return labels[type] || type;
+        }
+
+        function renderRecords() {
+            if (records.length === 0) {
+                recordsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>No records yet. Add your first health record above.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            recordsList.innerHTML = `
+                <div class="records-container">
+                    ${records.map(record => `
+                        <div class="record-card type-${record.type}">
+                            <div class="record-header">
+                                <div class="record-icon-type">
+                                    <span class="record-icon">${typeIcons[record.type]}</span>
+                                    <span class="record-type-label">${getTypeLabel(record.type)}</span>
+                                </div>
+                            </div>
+                            <div class="record-date">📅 ${formatDate(record.date)}</div>
+                            <div class="record-title">${record.title}</div>
+                            ${record.notes ? `
+                                <div class="record-notes">${record.notes}</div>
+                            ` : `
+                                <div class="record-notes record-notes-empty">No notes added</div>
+                            `}
+                            ${record.vitals ? `
+                                <div class="record-vitals">${record.vitals}</div>
+                            ` : `
+                                <div class="record-vitals record-vitals-empty">No vitals recorded</div>
+                            `}
+                            <div class="record-footer">
+                                <button class="delete-btn" onclick="deleteRecord(${record.id})">Remove</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        renderRecords();
+
+        // Add sample data for demo
+        setTimeout(() => {
+            if (records.length === 0) {
+                const demoDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                records.push({
+                    id: Date.now(),
+                    date: demoDate,
+                    type: 'checkup',
+                    title: 'Annual Physical Exam',
+                    notes: 'Routine checkup, all vitals normal. Doctor recommended more exercise.',
+                    vitals: 'BP: 118/76, HR: 72, Temp: 98.6°F'
+                });
+                renderRecords();
+            }
+        }, 100);
+    </script>
+</body>
+</html>
